@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono,Pixelify_Sans, Inter,Jersey_10 } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Pixelify_Sans,
+  Inter,
+  Jersey_10,
+} from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Provider from "./provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
-const inter = Inter({subsets:['latin'],variable:'--font-inter'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,9 +24,9 @@ const geistMono = Geist_Mono({
 });
 
 const GameFont = Jersey_10({
-  subsets:['latin'],
+  subsets: ["latin"],
   variable: "--font-game",
-  weight:['400']
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -33,19 +40,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable}
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning className="dark">
+        <body
+          suppressHydrationWarning
+          className={`${geistSans.variable} ${geistMono.variable}
         ${GameFont.variable} ${inter.variable}
         antialiased`}
-      >
-        <Provider attribute="class"
+        >
+          <Provider
+            attribute="class"
             defaultTheme="dark"
             enableSystem
-            disableTransitionOnChange>
-          {children}
-        </Provider>
-      </body>
-    </html>
+            disableTransitionOnChange
+          >
+            {children}
+          </Provider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
